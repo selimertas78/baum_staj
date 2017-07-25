@@ -1,6 +1,32 @@
 <?php
 include_once "database.php";
 include_once "functions.php"; ?>
+<?php if (isset($_POST['kayit'])) {
+      $ad     = $_POST['ad'];
+      $soyad  = $_POST['soyad'];
+      $kuladi = $_POST['kuladi'];
+      $parola = $_POST['parola'] == $_POST['parola-y'] ? $_POST['parola'] : false;
+      $email  = $_POST['email'];
+      if ($parola) {
+        kayitol($kuladi,$ad,$soyad,$parola,$email);
+        echo "<b style='color:green;font-size:20px'>Kayıt işlemi başarılı.</b>";
+      }
+      else {
+        echo "<b style='font-size:20px'>Parola aynı değil.</b>";
+      }
+
+      }
+      elseif(isset($_POST['giris'])) {
+        if (girisyap($_POST['kuladi'], $_POST['sifre'])) {
+          echo "<b style='font-size:20px'>Giriş yapıldı.</b>";
+          header("Location: index.php");
+
+        }
+        else {
+          echo "<b style='font-size:20px'>Kullanıcı adı veya şifre yanlış.</b>";
+
+        }
+      } ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +64,6 @@ include_once "functions.php"; ?>
 
         <!-- Top content -->
         <div class="top-content">
-
             <div class="inner-bg">
                 <div class="container">
 
@@ -65,12 +90,12 @@ include_once "functions.php"; ?>
 	                            <div class="form-bottom">
 				                    <form role="form" action="" method="post" class="login-form">
 				                    	<div class="form-group">
-				                    		<label class="sr-only" for="form-username">Username</label>
-				                        	<input type="text" name="form-username" placeholder="Username..." class="form-username form-control" id="form-username">
+				                    		<label class="sr-only" for="form-username">Kullanıcı Adı</label>
+				                        	<input type="text" name="kuladi" placeholder="Kullanıcı..." class="form-username form-control" id="form-username">
 				                        </div>
 				                        <div class="form-group">
-				                        	<label class="sr-only" for="form-password">Password</label>
-				                        	<input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+				                        	<label class="sr-only" for="form-password">Şifre</label>
+				                        	<input type="password" name="sifre" placeholder="Şifre..." class="form-password form-control" id="form-password">
 				                        </div>
 				                        <button type="submit" class="btn" name="giris">Giriş!</button>
 				                    </form>
@@ -110,24 +135,7 @@ include_once "functions.php"; ?>
 	                        		</div>
 	                            </div>
 	                            <div class="form-bottom">
-                                <?php if (isset($_POST['kayit'])) {
-                                      $ad     = $_POST['ad'];
-                                      $soyad  = $_POST['soyad'];
-                                      $kuladi = $_POST['kuladi'];
-                                      $parola = $_POST['parola'] == $_POST['parola-y'] ? $_POST['parola'] : false;
-                                      $email  = $_POST['email'];
-                                      if ($parola) {
-                                        kayitol($kuladi,$ad,$soyad,$parola,$email);
-                                        echo "Kayıt işlemi başarılı.";
-                                      }
-                                      else {
-                                        echo "Parola aynı değil.";
-                                      }
 
-                                      }
-                                      elseif(isset($_POST['giris'])) {
-                                        echo "Giriş çalıştı";
-                                      } ?>
 				                    <form role="form" action="" method="post" class="registration-form">
                               <div class="form-group">
                               <label class="sr-only" for="kuladi">Kullanıcı Adı</label>

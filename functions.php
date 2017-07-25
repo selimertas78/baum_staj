@@ -21,4 +21,43 @@ function kayitol($kuladi,$ad,$soyad,$parola,$mail)
   $kayitol = $db->prepare("INSERT INTO kullanici(kuladi,pass,ad,soyad,mail) VALUES (?,?,?,?,?)");
   $kayitol->execute(array($kuladi,$parola,$ad,$soyad,$mail));
 }
+function girisyap($kuladi,$sifre)
+{
+  global $db;
+  $girisyap = $db -> prepare("select kuladi, pass from kullanici where kuladi= ? and pass= ?");
+  $girisyap -> execute(array($kuladi,$sifre));
+  return $girisyap -> rowCount();
+}
+function icerikgetir(){
+  global $db;
+  $icerikler = $db -> query("SELECT
+makale.id,
+makale.baslik,
+makale.icerik,
+makale.zaman,
+kullanici.kuladi,
+kategori.ad
+FROM
+makale
+INNER JOIN kullanici ON makale.kul_id = kullanici.id
+INNER JOIN kategori ON kategori.id = makale.kategori_id ORDER BY zaman DESC")->fetchAll(PDO::FETCH_ASSOC);
+  return $icerikler;
+}
+
+function tekilicerik($id){
+  global $db;
+  $icerik = $db -> query("SELECT
+	makale.baslik,
+	makale.icerik,
+	makale.zaman,
+	kullanici.kuladi,
+	kategori.ad
+	FROM
+	makale
+	INNER JOIN kullanici ON makale.kul_id = kullanici.id
+	INNER JOIN kategori ON kategori.id = makale.kategori_id
+  WHERE makale.id = $id")->fetch(PDO::FETCH_ASSOC);
+  return $icerik;
+}
+
 ?>
